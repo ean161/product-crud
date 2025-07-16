@@ -11,7 +11,7 @@
     }
     
     String action = (String) request.getAttribute("action");
-    String acFirstUpper = action.substring(0, 1).toUpperCase() + action.substring(1);
+    String acFirstUpper = (action != null ? action.substring(0, 1).toUpperCase() + action.substring(1) : null);
     Product product = (Product) request.getAttribute("product");
     
     ProductDAO dao = new ProductDAO();
@@ -29,7 +29,11 @@
         <% out.print(action.equals("create") ? "Create new" : acFirstUpper); %>
         product
     </h1>
-
+    <%
+        String message = Lib.getDOMMessage(request, response);
+        if (message != null)
+            out.print(message);
+    %>
     <form action="product" method="POST">
         <input type="hidden" value="${action}" name="action"/>
         <c:if test="${action != 'create'}">

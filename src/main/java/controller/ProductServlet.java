@@ -49,6 +49,7 @@ public class ProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         
+        boolean isSuccess = false;
         String action = request.getParameter("action");
         
         if (action == null)
@@ -60,10 +61,11 @@ public class ProductServlet extends HttpServlet {
             quantity = request.getParameter("quantity"),
             description = request.getParameter("description"),
             cat = request.getParameter("cat");
+        String rootReq = String.format("product?view=%s&id=%s", action, id);
         
         if (!action.equals("delete"))
             if (!validateInputs(response, name, price, quantity, description, cat)) {
-                response.sendRedirect("product");
+                response.sendRedirect(rootReq);
                 return;
             }
         
@@ -87,14 +89,19 @@ public class ProductServlet extends HttpServlet {
                     default:
                         break;
                 }
+                
+                isSuccess = true;
             } catch (Exception ex) {
+                isSuccess = false;
                 Lib.createCookieMessage(response, "0", "Please input correct data type with fields");
             }
         else
             Lib.createCookieMessage(response, "0", "Product ID not found in database");
         
-        response.sendRedirect("product");
-        return;
+        if (isSuccess) 
+            response.sendRedirect("product");
+        else
+            response.sendRedirect(rootReq);
     }
     
     public boolean validateInputs(HttpServletResponse response, String name, String price, String quantity, String description, String cat) {
