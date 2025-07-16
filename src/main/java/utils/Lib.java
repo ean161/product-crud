@@ -14,25 +14,15 @@ import java.nio.charset.StandardCharsets;
  */
 public class Lib {
     public static boolean isLogged(HttpServletRequest request) {
-        return !(Lib.getCookie(request, "userID") == null || Lib.getCookie(request, "userID").isEmpty());
+        return !Lib.isNull(Lib.getCookie(request, "userID"));
     }
-
-    public static String getCookie(HttpServletRequest request, String key) {
-        String value = null;
-
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies == null) {
-            return null;
+    
+    public static boolean isNull(String param) {
+        try {
+            return (param == null || param.isEmpty());
+        } catch (Exception ex) {
+            return true;
         }
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(key)) {
-                value = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
-                break;
-            }
-        }
-
-        return value;
     }
     
     public static void createCookieMessage(HttpServletResponse response, String status, String message) {
@@ -55,6 +45,23 @@ public class Lib {
             status.equals("1") ? "success" : "danger",
             message.substring(0, 1).toUpperCase() + message.substring(1)
         );
+    }
+
+    public static String getCookie(HttpServletRequest request, String key) {
+        String value = null;
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies == null) {
+            return null;
+        }
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(key)) {
+                value = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                break;
+            }
+        }
+
+        return value;
     }
 
     public static void setCookie(HttpServletResponse response, String key, String value, int expired) {
