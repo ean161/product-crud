@@ -3,6 +3,7 @@ package utils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.net.URLEncoder;
@@ -25,7 +26,10 @@ public class Lib {
         }
     }
     
-    public static void createCookieMessage(HttpServletResponse response, String status, String message) {
+    public static void setCookieMessage(HttpServletResponse response, String status, String message) {
+        Lib.delCookie(response, "status");
+        Lib.delCookie(response, "message");
+        
         Lib.setCookie(response, "status", status, 10);
         Lib.setCookie(response, "message", message, 10);
     }
@@ -45,6 +49,30 @@ public class Lib {
             status.equals("1") ? "success" : "danger",
             message.substring(0, 1).toUpperCase() + message.substring(1)
         );
+    }
+    
+    public static String getSession(HttpServletRequest request, String key) {
+        HttpSession session = request.getSession();
+
+        return (String) session.getAttribute(key);
+    }
+    
+    public static void setSession(HttpServletRequest request, String key, String value) {
+        HttpSession session = request.getSession();
+        
+        session.setAttribute(key, value);
+    }
+    
+    public static void delSession(HttpServletRequest request, String key) {
+        HttpSession session = request.getSession();
+        
+        session.removeAttribute(key);
+    }
+    
+    public static void destroySession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        
+        session.invalidate();
     }
 
     public static String getCookie(HttpServletRequest request, String key) {

@@ -69,7 +69,7 @@ public class ProductServlet extends HttpServlet {
                 return;
             }
         
-        Lib.createCookieMessage(response, "1", String.format("%s%s successfully", action, (id != null ? " product ID " + id : "")));
+        Lib.setCookieMessage(response, "1", String.format("%s%s successfully", action, (id != null ? " product ID " + id : "")));
         
         ProductDAO dao = new ProductDAO();
         boolean isValidProd = (!action.equals("create") ? dao.isValid(Integer.parseInt(id)) : true);
@@ -93,10 +93,10 @@ public class ProductServlet extends HttpServlet {
                 isSuccess = true;
             } catch (Exception ex) {
                 isSuccess = false;
-                Lib.createCookieMessage(response, "0", "Please input correct data type with fields");
+                Lib.setCookieMessage(response, "0", "Please input correct data type with fields");
             }
         else
-            Lib.createCookieMessage(response, "0", "Product ID not found in database");
+            Lib.setCookieMessage(response, "0", "Product ID not found in database");
         
         if (isSuccess) 
             response.sendRedirect("product");
@@ -107,35 +107,35 @@ public class ProductServlet extends HttpServlet {
     public boolean validateInputs(HttpServletResponse response, String name, String price, String quantity, String description, String cat) {
         boolean isValid = false;
         if (name == null || name.isEmpty())
-            Lib.createCookieMessage(response, "0", "name is required");
+            Lib.setCookieMessage(response, "0", "name is required");
         else if (price == null || price.isEmpty())
-            Lib.createCookieMessage(response, "0", "price is required");
+            Lib.setCookieMessage(response, "0", "price is required");
         else if (quantity == null || quantity.isEmpty())
-            Lib.createCookieMessage(response, "0", "quantity is required");
+            Lib.setCookieMessage(response, "0", "quantity is required");
         else if (description == null || description.isEmpty())
-            Lib.createCookieMessage(response, "0", "description is required");
+            Lib.setCookieMessage(response, "0", "description is required");
         else if (cat == null || cat.isEmpty())
-            Lib.createCookieMessage(response, "0", "cat is required");
+            Lib.setCookieMessage(response, "0", "cat is required");
         else {
             try {
                 int priceNum = Integer.parseInt(price);
                 if (priceNum < 0) {
-                    Lib.createCookieMessage(response, "0", "price must be a number and greater or equals than 0");
+                    Lib.setCookieMessage(response, "0", "price must be a number and greater or equals than 0");
                     return false;
                 }
             } catch (Exception ex) {
-                Lib.createCookieMessage(response, "0", "price must be a number and greater or equals than 0");
+                Lib.setCookieMessage(response, "0", "price must be a number and greater or equals than 0");
                 return false;
             }
             
             try {
                 int quantityNum = Integer.parseInt(quantity);
                 if (quantityNum < 0) {
-                    Lib.createCookieMessage(response, "0", "quantity must be a number and greater or equals than 0");
+                    Lib.setCookieMessage(response, "0", "quantity must be a number and greater or equals than 0");
                     return false;
                 }
             } catch (Exception ex) {
-                Lib.createCookieMessage(response, "0", "quantity must be a number and greater or equals than 0");
+                Lib.setCookieMessage(response, "0", "quantity must be a number and greater or equals than 0");
                 return false;
             }
             

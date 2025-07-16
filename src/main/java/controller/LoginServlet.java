@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
         User loggedUser = dao.login(username, Lib.hashMD5(password));
         
         if (loggedUser.getId() == -1) {
-            Lib.createCookieMessage(response, "0", "The user or password was wrong");
+            Lib.setCookieMessage(response, "0", "The user or password was wrong");
             response.sendRedirect("login");
         } else {
             Lib.setCookie(response, "userID", loggedUser.getId() + "", 60 * 60);

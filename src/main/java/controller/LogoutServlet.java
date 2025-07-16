@@ -17,7 +17,6 @@ import utils.Lib;
 public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Lib.delCookie(response, "isLoggedFail");
         Lib.delCookie(response, "userID");
         Lib.delCookie(response, "userName");
         response.sendRedirect("login");
